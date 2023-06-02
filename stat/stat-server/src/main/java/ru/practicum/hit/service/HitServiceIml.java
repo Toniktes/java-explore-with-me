@@ -1,6 +1,7 @@
 package ru.practicum.hit.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.hit.dto.EndpointHitDto;
 import ru.practicum.hit.mapper.HitMapper;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class HitServiceIml implements HitService {
