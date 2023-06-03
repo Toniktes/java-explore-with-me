@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.8'
 services:
   stats-server:
     build: stat/stat-server
@@ -9,10 +9,11 @@ services:
     depends_on:
       - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
-      - POSTGRES_USERNAME=ewm_stat_user
-      - POSTGRES_PASSWORD=ewm_stat_password
-      - TZ=GMT
+      - DB_NAME=stats
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - DB_HOST=stats-db
+      - DB_PORT=5432
     restart: on-failure
 
   stats-db:
@@ -23,10 +24,9 @@ services:
     volumes:
       - /var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=stats-db
-      - POSTGRES_USER=ewm_stat_user
-      - POSTGRES_PASSWORD=ewm_stat_password
-      - TZ=GMT
+    - POSTGRES_DB=stats
+    - POSTGRES_USER=root
+    - POSTGRES_PASSWORD=root
 
   ewm-service:
     build: main-service
