@@ -22,6 +22,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<modules>
+		<module>stat</module>
+		<module>main-service</module>
+
+	</modules>
+
 	<build>
 		<pluginManagement>
 			<plugins>
