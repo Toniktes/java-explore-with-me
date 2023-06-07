@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getUsers(List<Long> ids, Pageable pageable) {
         return ids.isEmpty() ? userMapper.toUserDtoList(userRepository.findAll(pageable).getContent()) :
-                userMapper.toUserDtoList(userRepository.findAllById(ids, pageable).getContent());
+                userMapper.toUserDtoList(userRepository.findAllByIdIn(ids, pageable).getContent());
     }
 
     @Transactional
