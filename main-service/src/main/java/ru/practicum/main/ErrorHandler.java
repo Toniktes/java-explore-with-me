@@ -62,4 +62,60 @@ public class ErrorHandler {
         return new ApiError(exception.getMessage(), "User with this id doesn't exist",
                 HttpStatus.NOT_FOUND.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ApiError handleEventNotExistException(final EventNotExistException exception) {
+        return new ApiError(exception.getMessage(), "Event with this id doesn't exist",
+                HttpStatus.NOT_FOUND.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ApiError handleAlreadyPublishedException(final AlreadyPublishedException exception) {
+        return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
+                HttpStatus.CONFLICT.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ApiError handleRequestAlreadyExistException(final RequestAlreadyExistException exception) {
+        return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
+                HttpStatus.CONFLICT.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ApiError handleWrongUserException(final WrongUserException exception) {
+        return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
+                HttpStatus.CONFLICT.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ApiError handleExceedingLimitException(final ExceedingLimitException exception) {
+        return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
+                HttpStatus.CONFLICT.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ApiError handleRequestNotExistException(final RequestNotExistException exception) {
+        return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
+                HttpStatus.NOT_FOUND.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ApiError handleRequestAlreadyConfirmedException(final RequestAlreadyConfirmedException exception) {
+        return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
+                HttpStatus.CONFLICT.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+    }
 }

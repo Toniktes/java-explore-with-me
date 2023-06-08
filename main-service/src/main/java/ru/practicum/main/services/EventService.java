@@ -1,12 +1,20 @@
 package ru.practicum.main.services;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.data.domain.Pageable;
 import ru.practicum.main.dto.event.EventFullDto;
+import ru.practicum.main.dto.event.EventShortDto;
 import ru.practicum.main.dto.event.NewEventDto;
+import ru.practicum.main.dto.event.UpdateEventUserRequest;
 
-import javax.validation.Valid;
+import java.util.List;
 
 public interface EventService {
+
+    List<EventShortDto> getEventsByUser(Long userId, Pageable pageable);
+
     EventFullDto addEvent(Long userId, NewEventDto newEventDto);
+
+    EventFullDto getEventByUser(Long userId, Long eventId);
+
+    EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest);
 }
