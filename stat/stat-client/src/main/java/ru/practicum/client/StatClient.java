@@ -1,46 +1,62 @@
 package ru.practicum.client;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+import ru.practicum.hit.dto.EndpointHitDto;
+import ru.practicum.viewStatsDto.ViewStatsDto;
 
-import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-@Service
-public class StatClient extends BaseClient {
+@Component
+public class StatClient {
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder){
+        return builder.build();
+    }
+    private final RestTemplate restTemplate;
+    private final String serverUrl;
 
-    private static final String API_STATS_PREFIX = "/ru/practicum/stat";
-
-    @Autowired
-    public StatClient(@Value("${ewm-stat.url}") String serverUrl, RestTemplateBuilder builder) {
-        super(
-                builder
-                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_STATS_PREFIX))
-                        .requestFactory(HttpComponentsClientHttpRequestFactory::new)
-                        .build()
-        );
+    public StatClient(@Value("${stats-server.url}") String serverUrl, RestTemplate restTemplate) {
+        this.serverUrl = serverUrl;
+        this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<Object> getStat(LocalDateTime start, LocalDateTime end, String[] uris, Boolean unique) {
-        Map<String, Object> parameters = Map.of(
-                "start", start,
-                "end", end,
-                "uris", uris,
-                "unique", unique
-        );
-        String path = "?start={start}&end={end}";
-        if (uris != null) {
-            path = path.concat("&uris={uris}");
-        }
-        if (unique != null) {
-            path = path.concat("&unique={unique}");
-        }
-        return get(path, parameters);
+    public void addStats(EndpointHitDto endpointHitDto) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<EndpointHitDto> requestEntity = new HttpEntity<>(endpointHitDto, headers);
+        restTemplate.exchange(serverUrl + "/hit", HttpMethod.POST, requestEntity, EndpointHitDto.class);
     }
 
+    public List<ViewStatsDto> getStats(String start, String end, List<String> uris, Boolean unique) {
+
+        Map<String, Object> parameters = new HashMap<>();
+
+        parameters.put("start", start);
+        parameters.put("end", end);
+        parameters.put("uris", uris);
+        parameters.put("unique", unique);
+
+        ResponseEntity<String> response = restTemplate.getForEntity(
+                serverUrl + "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
+                String.class, parameters);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            return Arrays.asList(objectMapper.readValue(response.getBody(), ViewStatsDto[].class));
+        } catch (JsonProcessingException exception) {
+            throw new StatsException(String.format("Json processing error: %s", exception.getMessage()));
+        }
+    }
 }

@@ -1,15 +1,15 @@
 package ru.practicum.hit.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
-@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class EndpointHitDto {
-
+    private Long id;
     private String app;
     private String uri;
     private String ip;
     private String timestamp;
-
 }

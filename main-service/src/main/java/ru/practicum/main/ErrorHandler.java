@@ -118,4 +118,12 @@ public class ErrorHandler {
         return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
                 HttpStatus.CONFLICT.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ApiError handleEventAlreadyCanceledException(final EventAlreadyCanceledException exception) {
+        return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
+                HttpStatus.CONFLICT.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+    }
 }
