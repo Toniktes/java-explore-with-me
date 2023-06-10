@@ -1,9 +1,6 @@
 package ru.practicum.main.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.practicum.main.enums.RequestStatus;
 
 import javax.persistence.*;
@@ -26,4 +23,10 @@ public class Request {
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
 
+    public Request(LocalDateTime created, Long event, Long requester, RequestStatus status) {
+        this.created = created;
+        this.event = event;
+        this.requester = requester;
+        this.status = status;
+    }
 }

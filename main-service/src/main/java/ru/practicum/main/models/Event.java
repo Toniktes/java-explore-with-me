@@ -8,6 +8,7 @@ import ru.practicum.main.enums.EventState;
 import ru.practicum.main.Pattern;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -43,6 +44,7 @@ public class Event {
     private Boolean requestModeration;
     @Enumerated(EnumType.STRING)
     private EventState state;
+    @Size(min = 3, max = 120)
     private String title;
     private Long views;
     @Transient

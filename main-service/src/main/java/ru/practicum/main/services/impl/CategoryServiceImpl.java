@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.main.dto.category.CategoryDto;
 import ru.practicum.main.dto.category.NewCategoryDto;
+import ru.practicum.main.exception.AlreadyExistsException;
 import ru.practicum.main.exception.CategoryIsNotEmptyException;
 import ru.practicum.main.exception.CategoryNotExistException;
 import ru.practicum.main.mappers.CategoryMapper;
@@ -31,10 +32,17 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto updateCategory(Long catId, CategoryDto categoryDto) {
-        Category category = categoryRepository.findById(catId)
-                .orElseThrow(() -> new CategoryIsNotEmptyException("Category doesn't exist"));
-        category.setName(categoryDto.getName());
-        return categoryMapper.toCategoryDto(categoryRepository.save(category));
+        if (categoryDto.getName() == null || categoryDto.getName().isEmpty()) {
+            throw new RuntimeException("Название категории не может быть пустым");
+        }
+        Category savedCategory = categoryRepository.findById(catId).orElseThrow(() ->
+                new CategoryNotExistException("Такой категории нет " + catId));
+        if (!savedCategory.getName().equals(categoryDto.getName()) && categoryRepository.existsByName(categoryDto.getName())) {
+            throw new AlreadyExistsException("Категория с таким именем уже существует: " + categoryDto.getName());
+        } else {
+            savedCategory.setName(categoryDto.getName());
+            return categoryMapper.toCategoryDto(categoryRepository.save(savedCategory));
+        }
     }
 
     @Override

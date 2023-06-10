@@ -3,6 +3,8 @@ package ru.practicum.main.controllers.admin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.main.dto.user.UserDto;
 import ru.practicum.main.services.UserService;
@@ -25,13 +27,16 @@ public class AdminUserController {
         return userService.getUsers(ids, PageRequest.of(from, size));
     }
 
+    @Transactional
     @PostMapping
-    public UserDto addUser(@Valid @RequestBody UserDto userDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDto addUser(@RequestBody @Valid UserDto userDto) {
         log.debug("received a request to add User");
         return userService.addUser(userDto);
     }
 
     @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long userId) {
         log.debug("received a request to deleting User id: {}", userId);
         userService.deleteUser(userId);

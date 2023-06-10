@@ -1,6 +1,7 @@
 package ru.practicum.main;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -10,6 +11,7 @@ import ru.practicum.main.models.ApiError;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @RestControllerAdvice
 public class ErrorHandler {
@@ -126,4 +128,12 @@ public class ErrorHandler {
         return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
                 HttpStatus.CONFLICT.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
     }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ApiError handleAlreadyExistsException(final AlreadyExistsException exception) {
+        return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
+                HttpStatus.CONFLICT.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+    }
+
 }

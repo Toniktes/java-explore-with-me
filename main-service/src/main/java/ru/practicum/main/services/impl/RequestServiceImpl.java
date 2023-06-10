@@ -6,12 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main.dto.request.EventRequestStatusUpdateRequest;
 import ru.practicum.main.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.main.dto.request.ParticipationRequestDto;
+import ru.practicum.main.enums.EventState;
 import ru.practicum.main.enums.RequestStatus;
 import ru.practicum.main.enums.RequestStatusToUpdate;
 import ru.practicum.main.exception.*;
 import ru.practicum.main.mappers.RequestMapper;
 import ru.practicum.main.models.Event;
 import ru.practicum.main.models.Request;
+import ru.practicum.main.models.User;
 import ru.practicum.main.repositories.EventRepository;
 import ru.practicum.main.repositories.RequestRepository;
 import ru.practicum.main.repositories.UserRepository;
@@ -20,6 +22,7 @@ import ru.practicum.main.services.RequestService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,30 +44,36 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ParticipationRequestDto addRequest(Long userId, Long eventId) {
-        if (requestRepository.existsByRequesterAndEvent(userId, eventId)) {
-            throw new RequestAlreadyExistException("Request already exists");
+        User requester = userRepository.findById(userId).orElseThrow(() -> new UserNotExistException("Такого пользователя нет "
+                + userId));
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotExistException("Такого события нет "
+                + eventId));
+        Request request = new Request(LocalDateTime.now(), eventId, userId, RequestStatus.PENDING);
+        Optional<Request> requests = requestRepository.findByRequesterAndEvent(userId, eventId);
+        if (requests.isPresent()) {
+            throw new AlreadyPublishedException("Нельзя добавить повторный запрос: userId {}, eventId {} " + userId + eventId);
         }
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new EventNotExistException("Event doesnt exist"));
         if (event.getInitiator().getId().equals(userId)) {
-            throw new WrongUserException("Can't create request by initiator");
+            throw new AlreadyPublishedException("Инициатор события не может добавить запрос на участие в своём событии " + userId);
+        }
+        if (!(event.getState().equals(EventState.PUBLISHED))) {
+            throw new AlreadyPublishedException("Нельзя участвовать в неопубликованном событии");
+        }
+        int limit = event.getParticipantLimit();
+        if (limit != 0) {
+            if (limit == event.getConfirmedRequests()) {
+                throw new ExceedingLimitException("У события достигнут лимит запросов на участие: " + limit);
+            }
+        } else {
+            request.setStatus(RequestStatus.CONFIRMED);
         }
 
-        if (event.getPublishedOn() == null) {
-            throw new EventIsNotPublishedException("Event is not published");
+        if (!event.getRequestModeration()) {
+            request.setStatus(RequestStatus.CONFIRMED);
+            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
         }
-
-        if (!event.getRequestModeration() &&
-                requestRepository.findAllByEvent(eventId).size() >= event.getParticipantLimit()) {
-            throw new ExceedingLimitException("The limit of applications for participation has been exceeded");
-        }
-
-        Request request = new Request();
-        request.setCreated(LocalDateTime.now());
-        request.setEvent(eventId);
-        request.setRequester(userId);
-        request.setStatus(RequestStatus.PENDING);
-        return requestMapper.toRequestDto(requestRepository.save(request));
+        Request savedRequest = requestRepository.save(request);
+        return requestMapper.toRequestDto(savedRequest);
     }
 
     @Override

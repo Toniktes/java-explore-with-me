@@ -95,60 +95,28 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
-        Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(() -> new EventNotExistException(""));
-
-        if (event.getPublishedOn() != null) {
-            throw new AlreadyPublishedException("Event already published");
-        }
-
-        if (updateEventUserRequest == null) {
-            return eventMapper.toEventFullDto(event);
-        }
-
-        if (updateEventUserRequest.getAnnotation() != null) {
-            event.setAnnotation(updateEventUserRequest.getAnnotation());
-        }
-        if (updateEventUserRequest.getCategory() != null) {
-            Category category = categoryRepository.findById(updateEventUserRequest.getCategory()).orElseThrow(() -> new CategoryNotExistException(""));
-            event.setCategory(category);
-        }
-        if (updateEventUserRequest.getDescription() != null) {
-            event.setDescription(updateEventUserRequest.getDescription());
-        }
-        if (updateEventUserRequest.getEventDate() != null) {
-            LocalDateTime eventDateTime = updateEventUserRequest.getEventDate();
-            if (eventDateTime.isBefore(LocalDateTime.now().plusHours(2))) {
-                throw new WrongTimeException("The start date of the event to be modified is less than one hour from the publication date.");
+    public EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserRequest event) {
+        Event eventFromDb = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotExistException("Такого события нет " + eventId));
+        if (eventFromDb.getState().equals(EventState.CANCELED) || eventFromDb.getState().equals(EventState.PENDING)) {
+            if (event.getEventDate() != null && event.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+                throw new ValidationException("Дата и время на которые намечено событие не может быть раньше, " +
+                        "чем через два часа от текущего момента ");
             }
-            event.setEventDate(updateEventUserRequest.getEventDate());
-        }
-        if (updateEventUserRequest.getLocation() != null) {
-            event.setLocation(updateEventUserRequest.getLocation());
-        }
-        if (updateEventUserRequest.getPaid() != null) {
-            event.setPaid(updateEventUserRequest.getPaid());
-        }
-        if (updateEventUserRequest.getParticipantLimit() != null) {
-            event.setParticipantLimit(updateEventUserRequest.getParticipantLimit().intValue());
-        }
-        if (updateEventUserRequest.getRequestModeration() != null) {
-            event.setRequestModeration(updateEventUserRequest.getRequestModeration());
-        }
-        if (updateEventUserRequest.getTitle() != null) {
-            event.setTitle(updateEventUserRequest.getTitle());
-        }
-
-        if (updateEventUserRequest.getStateAction() != null) {
-            if (updateEventUserRequest.getStateAction().equals(StateActionForUser.SEND_TO_REVIEW)) {
-                event.setState(EventState.PENDING);
-            } else {
-                event.setState(EventState.CANCELED);
+            if (StateActionForUser.SEND_TO_REVIEW == event.getStateAction()) {
+                eventFromDb.setState(EventState.PENDING);
             }
+            if (StateActionForUser.CANCEL_REVIEW == event.getStateAction()) {
+                eventFromDb.setState(EventState.CANCELED);
+            }
+        } else {
+            throw new AlreadyPublishedException("Изменить можно только отмененные события или события в состоянии ожидания модерации, " +
+                    "статус события = " + eventFromDb.getState());
         }
 
-        return eventMapper.toEventFullDto(eventRepository.save(event));
+        updateEventEntity(event, eventFromDb);
+        eventRepository.save(eventFromDb);
+        return eventMapper.toEventFullDto(eventFromDb);
     }
 
     @Override
@@ -184,11 +152,27 @@ public class EventServiceImpl implements EventService {
 
     private void validateTime(LocalDateTime start) {
         if (start.isBefore(LocalDateTime.now())) {
-            throw new WrongTimeException("Дата начала события должна быть не ранее чем за час от даты публикации");
+            throw new ValidationException("Дата начала события должна быть не ранее чем за час от даты публикации");
         }
     }
 
     private void updateEventEntity(UpdateEventAdminRequest event, Event eventToUpdate) {
+        eventToUpdate.setAnnotation(Objects.requireNonNullElse(event.getAnnotation(), eventToUpdate.getAnnotation()));
+        eventToUpdate.setCategory(event.getCategory() == null
+                ? eventToUpdate.getCategory()
+                : categoryRepository.findById(event.getCategory()).orElseThrow(() -> new CategoryNotExistException("Category not fount")));
+        eventToUpdate.setDescription(Objects.requireNonNullElse(event.getDescription(), eventToUpdate.getDescription()));
+        eventToUpdate.setEventDate(Objects.requireNonNullElse(event.getEventDate(), eventToUpdate.getEventDate()));
+        eventToUpdate.setLocation(event.getLocation() == null
+                ? eventToUpdate.getLocation()
+                : locationRepository.findByLatAndLon(event.getLocation().getLat(), event.getLocation().getLon())
+                .orElse(new Location(null, event.getLocation().getLat(), event.getLocation().getLon())));
+        eventToUpdate.setPaid(Objects.requireNonNullElse(event.getPaid(), eventToUpdate.getPaid()));
+        eventToUpdate.setParticipantLimit(Objects.requireNonNullElse(event.getParticipantLimit(), eventToUpdate.getParticipantLimit()));
+        eventToUpdate.setRequestModeration(Objects.requireNonNullElse(event.getRequestModeration(), eventToUpdate.getRequestModeration()));
+        eventToUpdate.setTitle(Objects.requireNonNullElse(event.getTitle(), eventToUpdate.getTitle()));
+    }
+    private void updateEventEntity(UpdateEventUserRequest event, Event eventToUpdate) {
         eventToUpdate.setAnnotation(Objects.requireNonNullElse(event.getAnnotation(), eventToUpdate.getAnnotation()));
         eventToUpdate.setCategory(event.getCategory() == null
                 ? eventToUpdate.getCategory()
@@ -269,7 +253,7 @@ public class EventServiceImpl implements EventService {
             start = LocalDateTime.parse(rangeStart, dateFormatter);
             end = LocalDateTime.parse(rangeEnd, dateFormatter);
             if (start.isAfter(end)) {
-                throw new WrongTimeException("Wrong dates");
+                throw new ValidationException("Wrong dates");
             }
         } else {
             if (rangeStart == null && rangeEnd == null) {
