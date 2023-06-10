@@ -27,6 +27,13 @@
 		<module>main-service</module>
 
 	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>com.fommil</groupId>
+			<artifactId>jsonformat_2.11</artifactId>
+			<version>1.0.0-RC9</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<pluginManagement>

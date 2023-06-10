@@ -18,6 +18,7 @@ import ru.practicum.main.repositories.UserRepository;
 import ru.practicum.main.services.RequestService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,7 +78,7 @@ public class RequestServiceImpl implements RequestService {
     @Transactional(readOnly = true)
     @Override
     public List<ParticipationRequestDto> getRequestsByUserOfEvent(Long userId, Long eventId) {
-        return requestMapper.toRequestDtoList(requestRepository.findAllByEventAndRequester(eventId, userId));
+        return requestMapper.toRequestDtoList(requestRepository.findAllByEventWithInitiator(eventId, userId));
     }
 
     @Override
@@ -85,22 +86,19 @@ public class RequestServiceImpl implements RequestService {
                                                          EventRequestStatusUpdateRequest eventRequest) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotExistException("Event doesn't exist"));
-        EventRequestStatusUpdateResult result = new EventRequestStatusUpdateResult();
 
+        EventRequestStatusUpdateResult result = new EventRequestStatusUpdateResult();
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
             return result;
         }
 
-        List<Request> requests = requestRepository.findAllByEventAndRequester(eventId, userId);
-        List<Request> requestsToUpdate = requests
-                .stream()
-                .filter(x -> eventRequest.getRequestIds().contains(x.getId()))
+        List<Request> requests = requestRepository.findAllByEventWithInitiator(userId, eventId);
+        List<Request> requestsToUpdate = requests.stream().filter(x -> eventRequest.getRequestIds()
+                        .contains(x.getId()))
                 .collect(Collectors.toList());
 
-        if (requestsToUpdate
-                .stream()
-                .anyMatch(x -> x.getStatus().equals(RequestStatus.CONFIRMED) &&
-                        eventRequest.getStatus().equals(RequestStatusToUpdate.REJECTED))) {
+        if (requestsToUpdate.stream().anyMatch(x -> x.getStatus().equals(RequestStatus.CONFIRMED) &&
+                eventRequest.getStatus().equals(RequestStatusToUpdate.REJECTED))) {
             throw new RequestAlreadyConfirmedException("request already confirmed");
         }
 
@@ -115,15 +113,20 @@ public class RequestServiceImpl implements RequestService {
 
         requestRepository.saveAll(requestsToUpdate);
 
-        switch (eventRequest.getStatus()) {
-            case CONFIRMED:
-                event.setConfirmedRequests(event.getConfirmedRequests() + requestsToUpdate.size());
-                eventRepository.save(event);
-                result.setConfirmedRequests(requestMapper.toRequestDtoList(requestsToUpdate));
-                break;
-            case REJECTED:
-                result.setRejectedRequests(requestMapper.toRequestDtoList(requestsToUpdate));
+        if (eventRequest.getStatus().equals(RequestStatusToUpdate.CONFIRMED)) {
+            event.setConfirmedRequests(event.getConfirmedRequests() + requestsToUpdate.size());
         }
+
+        eventRepository.save(event);
+
+        if (eventRequest.getStatus().equals(RequestStatusToUpdate.CONFIRMED)) {
+            result.setConfirmedRequests(requestMapper.toRequestDtoList(requestsToUpdate));
+        }
+
+        if (eventRequest.getStatus().equals(RequestStatusToUpdate.REJECTED)) {
+            result.setRejectedRequests(requestMapper.toRequestDtoList(requestsToUpdate));
+        }
+
         return result;
     }
 }

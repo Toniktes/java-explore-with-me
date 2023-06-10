@@ -27,26 +27,29 @@ public class HitServiceIml implements HitService {
         return hitMapper.toEndpointHitDto(hitRepository.save(endpointHit));
     }
 
-    @Override
-    public List<ViewStatsDto> getStat(String start, String end, List<String> uris, String unique) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime timeStart = LocalDateTime.parse(start, formatter);
-        LocalDateTime timeEnd = LocalDateTime.parse(end, formatter);
-        boolean onlyUnique = Boolean.parseBoolean(unique);
-        List<ViewStatsDto> viewStats;
-        if (onlyUnique) {
-            if (uris != null) {
-                viewStats = hitRepository.getUniqueWithUris(timeStart, timeEnd, uris);
-            } else {
-                viewStats = hitRepository.getUniqueWithOutUris(timeStart, timeEnd);
+        @Override
+        public List<ViewStatsDto> getStat(String start, String end, List<String> uris, String unique) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime timeStart = LocalDateTime.parse(start, formatter);
+            LocalDateTime timeEnd = LocalDateTime.parse(end, formatter);
+            boolean onlyUnique = Boolean.parseBoolean(unique);
+            if (unique == null) {
+                onlyUnique = false;
             }
-        } else {
-            if (uris != null) {
-                viewStats = hitRepository.getWithUris(timeStart, timeEnd, uris);
+            List<ViewStatsDto> viewStats;
+            if (onlyUnique) {
+                if (uris != null) {
+                    viewStats = hitRepository.getUniqueWithUris(timeStart, timeEnd, uris);
+                } else {
+                    viewStats = hitRepository.getUniqueWithOutUris(timeStart, timeEnd);
+                }
             } else {
-                viewStats = hitRepository.getWithOutUris(timeStart, timeEnd);
+                if (uris != null) {
+                    viewStats = hitRepository.getWithUris(timeStart, timeEnd, uris);
+                } else {
+                    viewStats = hitRepository.getWithOutUris(timeStart, timeEnd);
+                }
             }
+            return viewStats;
         }
-        return viewStats;
-    }
 }

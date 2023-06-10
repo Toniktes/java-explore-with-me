@@ -29,6 +29,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fommil</groupId>
+            <artifactId>jsonformat_2.11</artifactId>
+            <version>1.0.0-RC9</version>
+        </dependency>
     </dependencies>
 
 

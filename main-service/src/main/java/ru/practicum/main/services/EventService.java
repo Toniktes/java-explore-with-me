@@ -7,6 +7,7 @@ import ru.practicum.main.enums.SortValue;
 import ru.practicum.main.models.Event;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
@@ -21,14 +22,16 @@ public interface EventService {
 
     EventFullDto updateEvent(Long eventId, UpdateEventAdminRequest updateEventAdminRequest);
 
-    List<EventFullDto> getEventsByAdmin(List<Long> users, EventState states, List<Long> categoriesId,
-                                        String rangeStart, String rangeEnd, Pageable pageable);
+    List<EventFullDto> getEventsByAdmin(List<Long> userIds, List<String> states, List<Long> categories,
+                                        String rangeStart, String rangeEnd, Integer from, Integer size,
+                                        HttpServletRequest request);
 
-    void setView(List<Event> events);
 
-    List<EventFullDto> getEventsWithParams(String text, List<Long> categories, Boolean paid, String rangeStart,
-                                           String rangeEnd, Boolean onlyAvailable, SortValue sort,
-                                           Pageable pageable, HttpServletRequest request);
+
+
+    List<EventShortDto> getEventsWithParams(String text, List<Long> categoriesIds, Boolean paid, String rangeStart,
+                                            String rangeEnd, Boolean onlyAvailable, SortValue sort, Integer from,
+                                            Integer size, HttpServletRequest request);
 
     EventFullDto getEvent(Long id, HttpServletRequest request);
 

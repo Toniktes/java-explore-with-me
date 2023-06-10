@@ -1,5 +1,6 @@
 package ru.practicum.hit.model;
 
+import jdk.jfr.Timestamp;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class EndpointHit {
 
     private String ip;
 
-    @Column(name = "created_date")
+    @Timestamp
     private LocalDateTime timestamp;
 
 }

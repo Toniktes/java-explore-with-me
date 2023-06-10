@@ -1,13 +1,12 @@
 package ru.practicum.hit.controller;
 
-import ru.practicum.hit.dto.EndpointHitDto;
-import ru.practicum.hit.service.HitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.hit.dto.EndpointHitDto;
+import ru.practicum.hit.service.HitService;
 import ru.practicum.viewStatsDto.ViewStatsDto;
-
 
 import java.util.List;
 
@@ -32,5 +31,4 @@ public class HitController {
         log.debug("received a request to getStat with endpoint /stats");
         return ResponseEntity.ok().body(service.getStat(start, end, uris, unique));
     }
-
 }

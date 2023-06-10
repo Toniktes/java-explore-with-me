@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/admin/users")
 @RequiredArgsConstructor
 public class AdminUserController {
-    UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public List<UserDto> getUsers(@RequestParam(required = false, name = "ids") List<Long> ids,

@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS hits (
     app VARCHAR,
     uri VARCHAR,
     ip VARCHAR,
-    created_date TIMESTAMP WITHOUT TIME ZONE,
+    timestamp TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     CONSTRAINT pk_hit PRIMARY KEY (id)
     );
 

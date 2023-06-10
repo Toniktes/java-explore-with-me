@@ -10,5 +10,4 @@ public interface HitService {
     EndpointHitDto addHit(EndpointHitDto endpointHitDto);
 
     List<ViewStatsDto> getStat(String start, String end, List<String> uris, String unique);
-
 }

@@ -91,6 +91,11 @@
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.fommil</groupId>
+			<artifactId>jsonformat_2.11</artifactId>
+			<version>1.0.0-RC9</version>
+		</dependency>
 	</dependencies>
 
 </project>

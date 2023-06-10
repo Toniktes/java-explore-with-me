@@ -20,6 +20,7 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 2000)
     private String annotation;
     @OneToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
@@ -27,6 +28,7 @@ public class Event {
     private int confirmedRequests;
     @Column(name = "created_On")
     private LocalDateTime createdOn;
+    @Column(length = 7000)
     private String description;
     private LocalDateTime eventDate;
     @OneToOne
@@ -36,7 +38,7 @@ public class Event {
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
     private Boolean paid;
-    private int participantLimit;
+    private Integer participantLimit;
     private LocalDateTime publishedOn;
     private Boolean requestModeration;
     @Enumerated(EnumType.STRING)

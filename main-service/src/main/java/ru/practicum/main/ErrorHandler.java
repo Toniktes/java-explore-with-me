@@ -44,7 +44,7 @@ public class ErrorHandler {
     @ResponseBody
     public ApiError handleValidationException(ValidationException exception) {
         return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
-                HttpStatus.CONFLICT.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+                HttpStatus.BAD_REQUEST.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
     }
 
     @ExceptionHandler

@@ -40,5 +40,4 @@ public interface HitRepository extends JpaRepository<EndpointHit, Long> {
             "GROUP BY h.app, h.uri " +
             "ORDER BY COUNT(h.ip) DESC ")
     List<ViewStatsDto> getWithOutUris(@Param("start") LocalDateTime timeStart, @Param("end") LocalDateTime timeEnd);
-
 }
