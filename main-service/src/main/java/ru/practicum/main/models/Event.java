@@ -1,11 +1,10 @@
 package ru.practicum.main.models;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.main.enums.EventState;
 import ru.practicum.main.Pattern;
+import ru.practicum.main.enums.EventState;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;

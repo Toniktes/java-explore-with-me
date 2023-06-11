@@ -2,12 +2,9 @@ package ru.practicum.main.services;
 
 import org.springframework.data.domain.Pageable;
 import ru.practicum.main.dto.event.*;
-import ru.practicum.main.enums.EventState;
 import ru.practicum.main.enums.SortValue;
-import ru.practicum.main.models.Event;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
