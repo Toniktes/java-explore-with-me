@@ -15,6 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "compilations")
 public class Compilation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

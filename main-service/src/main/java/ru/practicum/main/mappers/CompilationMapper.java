@@ -21,4 +21,7 @@ public interface CompilationMapper {
         entity.setTitle(dto.getTitle());
         return entity;
     }
+
+
+
 }

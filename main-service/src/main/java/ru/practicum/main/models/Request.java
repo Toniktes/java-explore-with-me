@@ -18,12 +18,16 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime created;
-    private Long event;
-    private Long requester;
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
+    @ManyToOne
+    @JoinColumn(name = "requester_id")
+    private User requester;
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
 
-    public Request(LocalDateTime created, Long event, Long requester, RequestStatus status) {
+    public Request(LocalDateTime created, Event event, User requester, RequestStatus status) {
         this.created = created;
         this.event = event;
         this.requester = requester;

@@ -16,6 +16,7 @@ import ru.practicum.main.repositories.CompilationRepository;
 import ru.practicum.main.repositories.EventRepository;
 import ru.practicum.main.services.CompilationService;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public CompilationDto addCompilation(NewCompilationDto compilation) {
         if (compilation.getEvents() != null && compilation.getEvents().size() != 0) {
-            List<Long> eventIds = compilation.getEvents();
+            Set<Long> eventIds = compilation.getEvents();
             Set<Event> events = new HashSet<>(eventRepository.findAllByIdIn(eventIds));
             Compilation compilationEntity = compilationMapper.toCompilation(compilation);
             compilationEntity.setEvents(events);
@@ -40,6 +41,9 @@ public class CompilationServiceImpl implements CompilationService {
             return compilationMapper.mapToCompilationDto(savedCompil);
         }
         Compilation fromDto = compilationMapper.toCompilation(compilation);
+        if (fromDto.getEvents() == null) {
+            fromDto.setEvents(new HashSet<>());
+        }
         Compilation savedCompil = compilationRepository.save(fromDto);
         return compilationMapper.mapToCompilationDto(savedCompil);
     }
@@ -54,7 +58,7 @@ public class CompilationServiceImpl implements CompilationService {
         Compilation compilationFromDb = compilationRepository.findById(compId).orElseThrow(() ->
                 new CompilationNotExistException("The compilation doesn't exist"));
         if (compilation.getEvents() != null && !compilation.getEvents().isEmpty()) {
-            List<Long> eventIds = compilation.getEvents();
+            Set<Long> eventIds = compilation.getEvents();
             Set<Event> events = new HashSet<>(eventRepository.findAllByIdIn(eventIds));
             compilationFromDb.setEvents(events);
         }

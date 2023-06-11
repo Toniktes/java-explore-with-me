@@ -23,7 +23,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Optional<Event> findByIdAndInitiatorId(Long eventId, Long userId);
 
-    Set<Event> findAllByIdIn(List<Long> events);
+    Set<Event> findAllByIdIn(Set<Long> events);
 
     Optional<Event> findByIdAndPublishedOnIsNotNull(Long eventId);
 
