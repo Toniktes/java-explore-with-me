@@ -23,6 +23,7 @@ public class AdminEventController {
         return eventService.updateEvent(eventId, updateEventAdminRequest);
 
     }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getEventsByAdmin(@RequestParam(name = "users", required = false) List<Long> userIds,

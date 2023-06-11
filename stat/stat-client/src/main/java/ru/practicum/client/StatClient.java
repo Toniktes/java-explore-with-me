@@ -48,7 +48,7 @@ public class StatClient extends BaseClient {
                 "start", LocalDateTime.now().minusYears(1000).format(date),
                 "end", LocalDateTime.now().plusYears(1000).format(date),
                 "uris", List.of("/events/" + eventId),
-                "unique", Boolean.TRUE
+                "unique", true
         );
         ResponseEntity<Object> response = get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
 

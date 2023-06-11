@@ -3,20 +3,15 @@ package ru.practicum.main.controllers.pub;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.client.StatClient;
-import ru.practicum.hit.dto.EndpointHitDto;
 import ru.practicum.main.Pattern;
 import ru.practicum.main.dto.event.EventFullDto;
 import ru.practicum.main.dto.event.EventShortDto;
 import ru.practicum.main.enums.SortValue;
 import ru.practicum.main.services.EventService;
-import ru.practicum.viewStatsDto.ViewStatsDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -24,9 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PublicEventController {
     private final EventService eventService;
-    private final StatClient statsClient;
-    private final String datePattern = Pattern.DATE;
-    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 
     @GetMapping
     public List<EventShortDto> getEventsByPublic(

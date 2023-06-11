@@ -1,7 +1,6 @@
 package ru.practicum.main.controllers.pub;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.main.dto.compilation.CompilationDto;
 import ru.practicum.main.services.CompilationService;

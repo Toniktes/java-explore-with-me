@@ -309,15 +309,4 @@ public class EventServiceImpl implements EventService {
         return eventDto;
     }
 
-
-    private EndpointHitDto createEndpointHit(HttpServletRequest request) {
-        EndpointHitDto dto = new EndpointHitDto();
-        dto.setApp("main-service");
-        dto.setUri(request.getRequestURI());
-        dto.setIp(request.getRemoteAddr());
-        dto.setTimestamp(LocalDateTime.now().format(dateFormatter));
-        return dto;
-    }
-
-
 }
