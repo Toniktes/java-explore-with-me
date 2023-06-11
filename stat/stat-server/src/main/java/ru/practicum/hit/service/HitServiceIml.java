@@ -3,7 +3,7 @@ package ru.practicum.hit.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.hit.ValidationException;
+import ru.practicum.exception.ValidationException;
 import ru.practicum.hit.dto.EndpointHitDto;
 import ru.practicum.hit.mapper.HitMapper;
 import ru.practicum.hit.model.EndpointHit;

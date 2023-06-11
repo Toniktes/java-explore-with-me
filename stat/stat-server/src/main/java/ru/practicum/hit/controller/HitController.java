@@ -2,6 +2,7 @@ package ru.practicum.hit.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.hit.dto.EndpointHitDto;
@@ -18,6 +19,7 @@ public class HitController {
     private final HitService service;
 
     @PostMapping(value = "/hit")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EndpointHitDto> addHit(@RequestBody EndpointHitDto endpointHitDto) {
         log.debug("received a request to add Hit with body={}", endpointHitDto);
         return ResponseEntity.ok().body(service.addHit(endpointHitDto));
