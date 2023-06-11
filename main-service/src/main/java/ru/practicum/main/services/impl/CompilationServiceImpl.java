@@ -16,7 +16,6 @@ import ru.practicum.main.repositories.CompilationRepository;
 import ru.practicum.main.repositories.EventRepository;
 import ru.practicum.main.services.CompilationService;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,42 +71,10 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationMapper.mapToCompilationDto(updated);
     }
 
-
-/*    @Override
-    public CompilationDto getCompilation(Long compId) {
-        Compilation compilation = compilationRepository.findById(compId)
-                .orElseThrow(() -> new CompilationNotExistException("Compilation doesn't exist"));
-        return compilationMapper.mapToCompilationDto(compilation);
-    }*/
-
-    /*  @Override
-      public List<CompilationDto> getCompilations(Boolean pinned, Pageable pageable) {
-          CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-          CriteriaQuery<Compilation> query = builder.createQuery(Compilation.class);
-
-          Root<Compilation> root = query.from(Compilation.class);
-          Predicate criteria = builder.conjunction();
-
-          if (pinned != null) {
-              Predicate isPinned;
-              if (pinned) {
-                  isPinned = builder.isTrue(root.get("pinned"));
-              } else {
-                  isPinned = builder.isFalse(root.get("pinned"));
-              }
-              criteria = builder.and(criteria, isPinned);
-          }
-
-          query.select(root).where(criteria);
-          List<Compilation> compilations = entityManager.createQuery(query)
-                  .setFirstResult(pageable.getPageNumber())
-                  .setMaxResults(pageable.getPageSize())
-                  .getResultList();
-          return compilationMapper.mapToListCompilationDto(compilations);
-      }*/
     @Override
     public List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
-        Page<Compilation> compilationEntities = compilationRepository.findAllByPinned(pinned, PageRequest.of(from / size, size, Sort.by("id")));
+        Page<Compilation> compilationEntities = compilationRepository.findAllByPinned(pinned,
+                PageRequest.of(from / size, size, Sort.by("id")));
         return compilationEntities.stream().map(compilationMapper::mapToCompilationDto).collect(Collectors.toList());
     }
 

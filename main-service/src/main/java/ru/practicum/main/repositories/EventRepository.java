@@ -25,8 +25,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Set<Event> findAllByIdIn(Set<Long> events);
 
-    Optional<Event> findByIdAndPublishedOnIsNotNull(Long eventId);
-
     Optional<Event> findByIdAndState(Long eventId, EventState eventStatus);
 
     @Query("SELECT e FROM Event e " +
@@ -36,10 +34,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "AND (:paid is null or paid is :paid) " +
             "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd")
     Page<Event> searchPublishedEvents(@Param("categoryIds") List<Long> categoryIds,
-                                            @Param("paid") Boolean paid,
-                                            @Param("rangeStart") LocalDateTime start,
-                                            @Param("rangeEnd") LocalDateTime end,
-                                            Pageable pageable);
+                                      @Param("paid") Boolean paid,
+                                      @Param("rangeStart") LocalDateTime start,
+                                      @Param("rangeEnd") LocalDateTime end,
+                                      Pageable pageable);
 
     @Query("SELECT e FROM Event e " +
             "JOIN e.initiator " +
@@ -49,13 +47,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "AND e.category.id IN :categories " +
             "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd")
     Page<Event> findAllWithAllParameters(@Param("userIds") List<Long> userIds,
-                                               @Param("states") List<EventState> states,
-                                               @Param("categories") List<Long> categories,
-                                               @Param("rangeStart") LocalDateTime rangeStart,
-                                               @Param("rangeEnd") LocalDateTime rangeEnd, Pageable pageable);
+                                         @Param("states") List<EventState> states,
+                                         @Param("categories") List<Long> categories,
+                                         @Param("rangeStart") LocalDateTime rangeStart,
+                                         @Param("rangeEnd") LocalDateTime rangeEnd, Pageable pageable);
 
-    @Query("SELECT e FROM Event e " +
-            "WHERE e.id = :id " +
-            "AND e.state ='PUBLISHED'")
-    Optional<Event> findEventByIdAndStatePublished(@Param("id") Long eventId);
 }

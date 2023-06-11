@@ -21,6 +21,4 @@ public interface EventMapper {
 
     List<EventShortDto> toEventShortDtoList(List<Event> events);
 
-    List<EventFullDto> toEventFullDtoList(List<Event> events);
-
 }

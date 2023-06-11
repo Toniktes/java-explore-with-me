@@ -8,7 +8,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.client.StatClient;
-import ru.practicum.hit.dto.EndpointHitDto;
 import ru.practicum.main.Pattern;
 import ru.practicum.main.dto.event.*;
 import ru.practicum.main.enums.EventState;
@@ -51,23 +50,6 @@ public class EventServiceImpl implements EventService {
     public List<EventShortDto> getEventsByUser(Long userId, Pageable pageable) {
         return eventMapper.toEventShortDtoList(eventRepository.findAllByInitiatorId(userId, pageable).toList());
     }
-
-   /* @Override
-    public EventFullDto addEvent(Long userId, NewEventDto newEventDto) {
-        Category category = categoryRepository.findById(newEventDto.getCategory())
-                .orElseThrow(() -> new CategoryNotExistException("not found category"));
-        LocalDateTime eventDate = newEventDto.getEventDate();
-        if (eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
-            throw new WrongTimeException("The event cannot be earlier than two hours from the current moment");
-        }
-        Event event = eventMapper.toEventModel(newEventDto);
-        event.setCategory(category);
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotExistException(String.format(
-                        "Can't create event, the user with id = %s doesn't exist", userId)));
-        event.setInitiator(user);
-        return eventMapper.toEventFullDto(eventRepository.save(event));
-    }*/
 
     @Override
     public EventFullDto addEvent(Long userId, NewEventDto event) {
@@ -172,6 +154,7 @@ public class EventServiceImpl implements EventService {
         eventToUpdate.setRequestModeration(Objects.requireNonNullElse(event.getRequestModeration(), eventToUpdate.getRequestModeration()));
         eventToUpdate.setTitle(Objects.requireNonNullElse(event.getTitle(), eventToUpdate.getTitle()));
     }
+
     private void updateEventEntity(UpdateEventUserRequest event, Event eventToUpdate) {
         eventToUpdate.setAnnotation(Objects.requireNonNullElse(event.getAnnotation(), eventToUpdate.getAnnotation()));
         eventToUpdate.setCategory(event.getCategory() == null
@@ -269,7 +252,8 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        final PageRequest pageRequest = PageRequest.of(from / size, size, Sort.by(SortValue.EVENT_DATE.equals(sort) ? "eventDate" : "views"));
+        final PageRequest pageRequest = PageRequest.of(from / size, size,
+                Sort.by(SortValue.EVENT_DATE.equals(sort) ? "eventDate" : "views"));
         List<Event> eventEntities = eventRepository.searchPublishedEvents(categoriesIds, paid, start, end, pageRequest)
                 .getContent();
         statClient.saveHit("ewm-main-service", request.getRequestURI(), request.getRemoteAddr(), LocalDateTime.now());

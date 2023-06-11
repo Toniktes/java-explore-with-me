@@ -8,10 +8,12 @@ import lombok.Setter;
 import ru.practicum.main.models.Location;
 import ru.practicum.main.Pattern;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+@Valid
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

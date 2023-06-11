@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @Entity
 @Table(name = "events")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,9 +38,12 @@ public class Event {
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
+    @Column(columnDefinition = "boolean default false")
     private Boolean paid;
+    @Column(columnDefinition = "integer default 0")
     private Integer participantLimit;
     private LocalDateTime publishedOn;
+    @Column(columnDefinition = "boolean default true")
     private Boolean requestModeration;
     @Enumerated(EnumType.STRING)
     private EventState state;
@@ -52,7 +55,7 @@ public class Event {
     @Transient
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 
-    public Event(Long id, String annotation, Category category, int confirmedRequests, LocalDateTime createdOn,
+   /* public Event(Long id, String annotation, Category category, int confirmedRequests, LocalDateTime createdOn,
                  String description, LocalDateTime eventDate, User initiator, Location location, Boolean paid,
                  Integer participantLimit, LocalDateTime publishedOn, Boolean requestModeration, EventState eventState,
                  String title, Long views) {
@@ -85,6 +88,6 @@ public class Event {
         }
         this.title = title;
         this.views = views;
-    }
+    }*/
 
 }

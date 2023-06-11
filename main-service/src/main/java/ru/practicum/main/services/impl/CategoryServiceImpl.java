@@ -1,7 +1,6 @@
 package ru.practicum.main.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.main.dto.category.CategoryDto;
@@ -67,6 +66,5 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new CategoryNotExistException("Category doesn't exist"));
         return categoryMapper.toCategoryDto(category);
     }
-
 
 }

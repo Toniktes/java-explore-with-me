@@ -14,6 +14,4 @@ public interface RequestMapper {
     @Mapping(source = "event.id", target = "event")
     @Mapping(source = "requester.id", target = "requester")
     ParticipationRequestDto toRequestDto(Request request);
-
-    List<ParticipationRequestDto> toRequestDtoList(List<Request> requests);
 }
