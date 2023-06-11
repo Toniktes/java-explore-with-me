@@ -58,7 +58,7 @@ public class EventServiceImpl implements EventService {
         validateTime(event.getEventDate());
         Event eventToSave = eventMapper.toEventModel(event);
         eventToSave.setState(EventState.PENDING);
-        eventToSave.setConfirmedRequests(0);
+        eventToSave.setConfirmedRequests(0L);
         eventToSave.setCreatedOn(LocalDateTime.now());
 
         Category category = categoryRepository.findById(event.getCategory())
