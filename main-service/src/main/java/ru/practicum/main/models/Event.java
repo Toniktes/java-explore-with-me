@@ -54,39 +54,4 @@ public class Event {
     @Transient
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 
-   /* public Event(Long id, String annotation, Category category, int confirmedRequests, LocalDateTime createdOn,
-                 String description, LocalDateTime eventDate, User initiator, Location location, Boolean paid,
-                 Integer participantLimit, LocalDateTime publishedOn, Boolean requestModeration, EventState eventState,
-                 String title, Long views) {
-        this.annotation = annotation;
-        this.category = category;
-        this.confirmedRequests = confirmedRequests;
-        if (createdOn == null) {
-            this.createdOn = LocalDateTime.now();
-        } else {
-            this.createdOn = createdOn;
-        }
-
-        this.description = description;
-        this.eventDate = eventDate;
-        this.id = id;
-        this.initiator = initiator;
-        this.location = location;
-        this.paid = paid;
-        this.participantLimit = participantLimit;
-        this.publishedOn = publishedOn;
-        if (requestModeration == null) {
-            this.requestModeration = true;
-        } else {
-            this.requestModeration = requestModeration;
-        }
-        if (eventState == null) {
-            this.state = EventState.PENDING;
-        } else {
-            this.state = eventState;
-        }
-        this.title = title;
-        this.views = views;
-    }*/
-
 }

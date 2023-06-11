@@ -27,16 +27,3 @@ public class Compilation {
     )
     private Set<Event> events;
 }
-    /*@GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long compilationId;
-    @Column(name = "title")
-    String title;
-    @Column(name = "pinned")
-    Boolean pinned;
-    @ManyToMany
-    @JoinTable(
-            name = "compilations_events",
-            joinColumns = {@JoinColumn(name = "compilation_id")},
-            inverseJoinColumns = {@JoinColumn(name = "event_id")}
-    )
-    Set<Event> events;*/

@@ -22,7 +22,7 @@ public class HitController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EndpointHitDto> addHit(@RequestBody EndpointHitDto endpointHitDto) {
         log.debug("received a request to add Hit with body={}", endpointHitDto);
-        return ResponseEntity.ok().body(service.addHit(endpointHitDto));
+        return new ResponseEntity<>(service.addHit(endpointHitDto), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/stats")
