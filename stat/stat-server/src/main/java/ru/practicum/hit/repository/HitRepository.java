@@ -18,7 +18,8 @@ public interface HitRepository extends JpaRepository<EndpointHit, Long> {
             "WHERE (h.timestamp between :start AND :end) AND h.uri IN :uris " +
             "GROUP BY h.app, h.uri " +
             "ORDER BY COUNT(DISTINCT h.ip) DESC ")
-    List<ViewStatsDto> getUniqueWithUris(@Param("start") LocalDateTime timeStart, @Param("end") LocalDateTime timeEnd, @Param("uris") List<String> uris);
+    List<ViewStatsDto> getUniqueWithUris(@Param("start") LocalDateTime timeStart, @Param("end") LocalDateTime timeEnd,
+                                         @Param("uris") List<String> uris);
 
     @Query(value = "SELECT new ru.practicum.viewStatsDto.ViewStatsDto(h.app, h.uri, COUNT(DISTINCT h.ip)) " +
             "FROM EndpointHit AS h " +
@@ -32,7 +33,8 @@ public interface HitRepository extends JpaRepository<EndpointHit, Long> {
             "WHERE (h.timestamp between :start AND :end) AND h.uri IN :uris " +
             "GROUP BY h.app, h.uri " +
             "ORDER BY COUNT(h.ip) DESC ")
-    List<ViewStatsDto> getWithUris(@Param("start") LocalDateTime timeStart, @Param("end") LocalDateTime timeEnd, @Param("uris") List<String> uris);
+    List<ViewStatsDto> getWithUris(@Param("start") LocalDateTime timeStart, @Param("end") LocalDateTime timeEnd,
+                                   @Param("uris") List<String> uris);
 
     @Query(value = "SELECT new ru.practicum.viewStatsDto.ViewStatsDto(h.app, h.uri, COUNT(h.ip)) " +
             "FROM EndpointHit AS h " +
@@ -40,5 +42,4 @@ public interface HitRepository extends JpaRepository<EndpointHit, Long> {
             "GROUP BY h.app, h.uri " +
             "ORDER BY COUNT(h.ip) DESC ")
     List<ViewStatsDto> getWithOutUris(@Param("start") LocalDateTime timeStart, @Param("end") LocalDateTime timeEnd);
-
 }

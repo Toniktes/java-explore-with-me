@@ -88,6 +88,11 @@
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.fommil</groupId>
+			<artifactId>jsonformat_2.11</artifactId>
+			<version>1.0.0-RC9</version>
+		</dependency>
 	</dependencies>
 
 	<build>
