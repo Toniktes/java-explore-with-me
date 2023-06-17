@@ -41,38 +41,7 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"const main = async () => {\r",
-							"    const api = new API(pm);\r",
-							"    const rnd = new RandomUtils();\r",
-							"\r",
-							"    let category;\r",
-							"    try {\r",
-							"        category = rnd.getCategory();\r",
-							"    } catch(err) {\r",
-							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
-							"    }\r",
-							"\r",
-							"    pm.request.body.update({\r",
-							"        mode: 'raw',\r",
-							"        raw: JSON.stringify(category),\r",
-							"        options: { raw: { language: 'json' } }\r",
-							"    });\r",
-							"};\r",
-							"\r",
-							"const interval = setInterval(() => {}, 1000);\r",
-							"\r",
-							"setTimeout(async () => \r",
-							"    {\r",
-							"        try {\r",
-							"            await main();\r",
-							"        } catch (e) {\r",
-							"            console.error(e);\r",
-							"        } finally {\r",
-							"            clearInterval(interval);\r",
-							"        }\r",
-							"    },  \r",
-							"    100 \r",
-							");"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -446,7 +415,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/users/:userId/requests?eventId=1",
+					"raw": "http://localhost:8080/users/:userId/requests?eventId=106",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -460,7 +429,7 @@
 					"query": [
 						{
 							"key": "eventId",
-							"value": "1"
+							"value": "106"
 						}
 					],
 					"variable": [
@@ -776,7 +745,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "2"
+							"value": "137"
 						},
 						{
 							"key": "comId",
@@ -1115,7 +1084,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/users/:userId/requests?eventId=2",
+					"raw": "http://localhost:8080/users/:userId/requests?eventId=107",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1129,7 +1098,7 @@
 					"query": [
 						{
 							"key": "eventId",
-							"value": "2"
+							"value": "107"
 						}
 					],
 					"variable": [
@@ -1194,7 +1163,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/users/:userId/requests?eventId=2",
+					"raw": "http://localhost:8080/users/:userId/requests?eventId=107",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1208,7 +1177,7 @@
 					"query": [
 						{
 							"key": "eventId",
-							"value": "2"
+							"value": "107"
 						}
 					],
 					"variable": [
