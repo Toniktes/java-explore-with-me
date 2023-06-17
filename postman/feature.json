@@ -387,7 +387,7 @@
 					"variable": [
 						{
 							"key": "eventId",
-							"value": "1"
+							"value": "106"
 						}
 					]
 				}
@@ -395,7 +395,7 @@
 			"response": []
 		},
 		{
-			"name": "Добавление запроса на участие в событии",
+			"name": "Добавление запроса на участие в событии от пользователя 2",
 			"event": [
 				{
 					"listen": "test",
@@ -466,7 +466,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "2"
+							"value": "137"
 						}
 					]
 				}
@@ -539,11 +539,11 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "2"
+							"value": "137"
 						},
 						{
 							"key": "eventId",
-							"value": "1"
+							"value": "106"
 						}
 					]
 				}
@@ -912,7 +912,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "2"
+							"value": "137"
 						}
 					]
 				}
@@ -991,7 +991,7 @@
 					"variable": [
 						{
 							"key": "eventId",
-							"value": "2"
+							"value": "107"
 						}
 					]
 				}
@@ -1135,7 +1135,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "1"
+							"value": "136"
 						}
 					]
 				}
@@ -1214,7 +1214,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "3"
+							"value": "138"
 						}
 					]
 				}
@@ -1287,11 +1287,11 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "1"
+							"value": "136"
 						},
 						{
 							"key": "eventId",
-							"value": "2"
+							"value": "107"
 						}
 					]
 				}
@@ -1364,11 +1364,11 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "3"
+							"value": "138"
 						},
 						{
 							"key": "eventId",
-							"value": "2"
+							"value": "107"
 						}
 					]
 				}
@@ -1437,7 +1437,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "3"
+							"value": "138"
 						}
 					]
 				}
@@ -1506,7 +1506,7 @@
 					"variable": [
 						{
 							"key": "eventId",
-							"value": "2"
+							"value": "107"
 						}
 					]
 				}
