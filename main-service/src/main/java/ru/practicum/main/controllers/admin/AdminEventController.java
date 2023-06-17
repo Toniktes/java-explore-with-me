@@ -48,7 +48,7 @@ public class AdminEventController {
         return commentService.updateComment(comId, comment);
     }
 
-    @DeleteMapping("comments/{userId}/{comId}")
+    @DeleteMapping("/comments/{userId}/{comId}")
     public void deleteComment(@PathVariable Long userId, @PathVariable Long comId) {
         log.debug("received a request to deleteComment userId: {}, commentId: {} ", userId, comId);
         commentService.deleteComment(userId, comId);

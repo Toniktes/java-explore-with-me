@@ -164,10 +164,10 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ApiError CommentNotExistException(CommentNotExistException exception) {
+    public ApiError handleCommentNotExistException(CommentNotExistException exception) {
         return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
-                HttpStatus.BAD_REQUEST.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+                HttpStatus.NOT_FOUND.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
     }
 }
