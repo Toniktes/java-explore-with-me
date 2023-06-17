@@ -1,9 +1,7 @@
 package ru.practicum.main.dto.comment;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.main.dto.event.EventFullDto;
 import ru.practicum.main.dto.event.EventShortDto;
 import ru.practicum.main.dto.user.UserDto;
 

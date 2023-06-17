@@ -12,11 +12,6 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     Optional<Request> findByIdAndRequesterId(Long requestId, Long userId);
 
-    @Query("SELECT p FROM Request AS p " +
-            "JOIN FETCH p.event e " +
-            "WHERE p.event = :eventId AND e.initiator.id = :userId")
-    List<Request> findAllByEventWithInitiator(@Param(value = "userId") Long userId, @Param("eventId") Long eventId);
-
     @Query("SELECT p FROM Request p " +
             "JOIN FETCH p.event e " +
             "WHERE e.initiator.id =:userId " +
@@ -33,4 +28,12 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             "WHERE p.requester.id =:userId " +
             "AND e.initiator.id <> :userId")
     List<Request> findAllByRequesterIdInForeignEvents(@Param("userId") Long userId);
+
+    @Query("SELECT p FROM Request p " +
+            "JOIN FETCH p.event e " +
+            "WHERE p.requester.id =:requesterId " +
+            "AND e.id = :eventId " +
+            "AND p.status = 'CONFIRMED'")
+    Optional<Request> findRequestByRequesterIdAndEventId(@Param("requesterId") Long requesterId,
+                                                         @Param("eventId") Long eventId);
 }
