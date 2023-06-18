@@ -1,12 +1,9 @@
 package ru.practicum.main.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jdk.jfr.Timestamp;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,7 +16,6 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min = 10, max = 7000)
     @Column(nullable = false)
     private String text;
 
@@ -31,7 +27,5 @@ public class Comment {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @Timestamp
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime created;
 }

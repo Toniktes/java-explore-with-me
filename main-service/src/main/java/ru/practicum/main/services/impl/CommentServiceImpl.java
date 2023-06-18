@@ -19,7 +19,6 @@ import ru.practicum.main.repositories.UserRepository;
 import ru.practicum.main.services.CommentService;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -77,9 +76,6 @@ public class CommentServiceImpl implements CommentService {
             throw new UserNotExistException("User not found with Id: " + userId);
         }
         List<Comment> comments = commentRepository.findAllByAuthorId(userId);
-        if (comments.size() == 0) {
-            return Collections.emptyList();
-        }
         return comments
                 .stream()
                 .map(commentMapper::toDto)
