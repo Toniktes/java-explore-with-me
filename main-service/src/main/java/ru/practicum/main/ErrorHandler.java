@@ -162,4 +162,12 @@ public class ErrorHandler {
         return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
                 HttpStatus.BAD_REQUEST.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ApiError handleCommentNotExistException(CommentNotExistException exception) {
+        return new ApiError(exception.getMessage(), "For the requested operation the conditions are not met.",
+                HttpStatus.NOT_FOUND.getReasonPhrase().toUpperCase(), LocalDateTime.now().format(dateFormatter));
+    }
 }
